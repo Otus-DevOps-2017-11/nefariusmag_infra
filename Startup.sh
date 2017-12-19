@@ -38,7 +38,15 @@ cd reddit && bundle install
 chown -R ${user}:${user} /home/${user}
 sudo -u ${user} bash -c "puma -d"
 if [ "$(ps aux | grep puma | grep -v grep | wc -l)" == "1" ]; then
-	echo "true install puma" >> /home/${user}/install.log
+	echo "true start puma" >> /home/${user}/install.log
 else
-	echo "false install puma" >> /home/${user}/install.log
+	echo "false start puma" >> /home/${user}/install.log
+fi
+
+sleep 2
+
+if [ "$(curl localhost:9292 | wc -l)" != 0 ]; then
+	echo "true reddit work" >> /home/${user}/install.log
+else
+	echo "false reddit work" >> /home/${user}/install.log
 fi
