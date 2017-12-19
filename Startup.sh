@@ -22,14 +22,15 @@ sleep 2
 
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
 bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.2.list'
-apt update
+apt update -y
 apt install -y mongodb-org
 systemctl start mongod
 systemctl enable mongod
-if [ "$(sudo systemctl status mongod) | wc -l" == "9" ]; then
+if [ "$(systemctl status mongod | wc -l)" == "13" ]; then
 	echo "true install & start mongod" >> install.log
 else
 	echo "false install & start mongod" >> install.log
+	echo "systemctl status mongod | wc -l = $(systemctl status mongod | wc -l)"
 fi
 
 sleep 2
