@@ -26,11 +26,11 @@ apt update -y
 apt install -y mongodb-org
 systemctl start mongod
 systemctl enable mongod
-if [ "$(systemctl status mongod | wc -l)" == "13" ]; then
+if [ "$(systemctl status mongod | wc -l)" == "9" ]; then
 	echo "true install & start mongod" >> install.log
 else
 	echo "false install & start mongod" >> install.log
-	echo "systemctl status mongod | wc -l = $(systemctl status mongod | wc -l)"
+	echo "systemctl status mongod | wc -l = $(systemctl status mongod | wc -l)" >> install.sh
 fi
 
 sleep 2
