@@ -12,6 +12,10 @@ Startup.sh # чтобы выкачать удаленно и запустить
 
 create.sh # чтобы не вбивать команду gcloud
 
+Добавил пару тестиков для прроверки развертывания
+На сервере в папке
+/home/reddit/install.log
+
 Строка запуска:
 
 ```gcloud compute instances create reddit-app\
