@@ -8,9 +8,8 @@ deploy.sh
 install_mongodb.sh  
 install_ruby.sh
 
-+
-
 Startup.sh # чтобы выкачать удаленно и запустить
+
 create.sh # чтобы не вбивать команду gcloud
 
 Строка запуска:
