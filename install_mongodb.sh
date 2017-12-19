@@ -5,7 +5,7 @@ sudo apt update
 sudo apt install -y mongodb-org
 sudo systemctl start mongod
 sudo systemctl enable mongod
-if [ "$(sudo systemctl status mongod) | wc -l" == "9" ]; then
+if [ -n "$(systemctl status mongod | grep running)" ]; then
 	echo "true install & start mongod"
 else
 	echo "false install & start mongod"
