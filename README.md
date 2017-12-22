@@ -1,4 +1,34 @@
 Dmitriy Erokhin - nefariusmag
+
+---
+Homework 7
+---
+Запуск packer для дефолтного образа:
+
+```
+packer build -var-file=variables.json ubuntu16.json
+```
+
+Запуск packer и gcloud для полного образа:
+
+```
+packer build -var-file=variables.json immutable.json
+
+gcloud compute instances create reddit-app\
+  --image-family reddit-full \
+  --tags puma-server \
+  --restart-on-failure
+
+```
+
+Сборка идет с помощью скриптов:
+
+install_ruby.sh
+install_mongodb.sh
+deploy.sh
+
+Чтобы reddit запускался автоматом при старте виртуалки положил в него сервис файл - deamon и настроил на автозапуск
+
 ---
 Homework 6
 ---
@@ -36,4 +66,4 @@ alias internalhost="ssh -A 35.198.103.134 'ssh 10.156.0.3'"
 
 ---
 Хост bastion, IP: 35.198.103.134, внутр. IP: 10.156.0.2.
-Хост: someinternalhost, внутр. IP: 10.156.0.3 
+Хост: someinternalhost, внутр. IP: 10.156.0.3
