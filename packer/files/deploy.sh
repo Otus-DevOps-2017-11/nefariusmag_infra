@@ -23,9 +23,10 @@ else
 	echo "false install & start mongod"
 fi
 
-# wget 
-
-puma -d
+wget https://raw.githubusercontent.com/Otus-DevOps-2017-11/nefariusmag_infra/packer-base/packer/files/deamon -O /etc/init.d/deamon
+chmod +x /etc/init.d/deamon
+update-rc.d deamon defaults 90
+/etc/init.d/deamon start
 
 if [ "$(ps aux | grep puma | grep -v grep | wc -l)" == "1" ]; then
 	echo "true install puma"
