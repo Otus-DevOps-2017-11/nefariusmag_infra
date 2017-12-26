@@ -27,7 +27,7 @@ resource "google_compute_instance" "app" {
   }
 
   metadata {
-    sshKeys = "${var.user}:${file(var.public_key_path)}"
+    sshKeys = "${var.user}:${file(var.public_key_path)}\nappuser1:${file(var.public_key_path)}"
   }
 
   connection {
@@ -45,6 +45,7 @@ resource "google_compute_instance" "app" {
   provisioner "remote-exec" {
     script = "files/deploy.sh"
   }
+
 }
 
 resource "google_compute_firewall" "firewall_puma" {
