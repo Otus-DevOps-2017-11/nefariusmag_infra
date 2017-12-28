@@ -4,8 +4,38 @@ provider "google" {
   region  = "${var.region}"
 }
 
+resource "google_compute_project_metadata" "ssh_keys" {
+   metadata {
+     sshKeys = "${var.user}:${file(var.public_key_path)}\nappuser1:${file(var.public_key_path)}"
+ }
+}
+
+resource "google_compute_firewall" "firewall_puma" {
+  name = "allow-puma-default"
+
+  # Название сети, в которой действует правило
+  network = "default"
+
+  # Какой доступ разрешить
+  allow {
+    protocol = "tcp"
+    ports    = ["9292"]
+  }
+
+  # Каким адресам разрешаем доступ
+  source_ranges = ["0.0.0.0/0"]
+
+  # Правило применимо для инстансов с тегом ...
+  target_tags = ["reddit-app"]
+
+}
+
 resource "google_compute_instance" "app" {
-  name         = "reddit-app"
+  # создаем два экземпляра
+  count = 2
+
+  # обозначиваем в имени индекс
+  name         = "reddit-app${count.index}"
   machine_type = "g1-small"
   zone         = "${var.zona}"
   tags         = ["reddit-app"]
@@ -26,10 +56,6 @@ resource "google_compute_instance" "app" {
     access_config {}
   }
 
-  metadata {
-    sshKeys = "${var.user}:${file(var.public_key_path)}\nappuser1:${file(var.public_key_path)}"
-  }
-
   connection {
     type        = "ssh"
     user        = "${var.user}"
@@ -45,24 +71,4 @@ resource "google_compute_instance" "app" {
   provisioner "remote-exec" {
     script = "files/deploy.sh"
   }
-
-}
-
-resource "google_compute_firewall" "firewall_puma" {
-  name = "allow-puma-default"
-
-  # Название сети, в которой действует правило
-  network = "default"
-
-  # Какой доступ разрешить
-  allow {
-    protocol = "tcp"
-    ports    = ["9292"]
-  }
-
-  # Каким адресам разрешаем доступ
-  source_ranges = ["0.0.0.0/0"]
-
-  # Правило применимо для инстансов с тегом ...
-  target_tags = ["reddit-app"]
 }
