@@ -37,7 +37,7 @@ resource "google_compute_instance" "app" {
   # обозначиваем в имени индекс
   name         = "reddit-app${count.index}"
   machine_type = "g1-small"
-  zone         = "${var.zona}"
+  zone         = "${var.zone}"
   tags         = ["reddit-app"]
 
   # определение загрузочного диска
@@ -71,4 +71,75 @@ resource "google_compute_instance" "app" {
   provisioner "remote-exec" {
     script = "files/deploy.sh"
   }
+}
+
+resource "google_compute_instance_group" "reddit-app-instance-group" {
+  name        = "reddit-app-instances"
+  description = "reddit-apps"
+
+  instances = [
+    "${google_compute_instance.app.self_link}",
+    "${google_compute_instance.app1.self_link}",
+  ]
+
+  named_port {
+    name = "http"
+    port = "9292"
+  }
+
+  zone = "${var.zone}"
+}
+
+resource "google_compute_global_forwarding_rule" "reddit-app-forwarding-rule" {
+  name       = "reddit-app-forwarding-rule"
+  target     = "${google_compute_target_http_proxy.reddit-app-http-proxy.self_link}"
+  port_range = "80"
+}
+
+resource "google_compute_target_http_proxy" "reddit-app-http-proxy" {
+  name        = "reddit-app-http-proxy"
+  description = "reddit-app-proxy"
+  url_map     = "${google_compute_url_map.reddit-app-url-map.self_link}"
+}
+
+resource "google_compute_url_map" "reddit-app-url-map" {
+  name            = "reddit-app-url-map"
+  description     = "reddit-app-url-map"
+  default_service = "${google_compute_backend_service.reddit-app-backend-service.self_link}"
+
+  host_rule {
+    hosts        = ["*"]
+    path_matcher = "allpaths"
+  }
+
+  path_matcher {
+    name            = "allpaths"
+    default_service = "${google_compute_backend_service.reddit-app-backend-service.self_link}"
+
+    path_rule {
+      paths   = ["/*"]
+      service = "${google_compute_backend_service.reddit-app-backend-service.self_link}"
+    }
+  }
+}
+
+resource "google_compute_backend_service" "reddit-app-backend-service" {
+  name        = "reddit-app-backend-service"
+  port_name   = "http"
+  protocol    = "HTTP"
+  timeout_sec = 10
+
+  backend {
+    group = "${google_compute_instance_group.reddit-app-instance-group.self_link}"
+  }
+
+  health_checks = ["${google_compute_http_health_check.reddit-app-health-check.self_link}"]
+}
+
+resource "google_compute_http_health_check" "reddit-app-health-check" {
+  name               = "reddit-app-health-check"
+  request_path       = "/"
+  check_interval_sec = 1
+  timeout_sec        = 1
+  port		     = 9292
 }
