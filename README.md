@@ -1,6 +1,54 @@
 Dmitriy Erokhin - nefariusmag
 
 ---
+Homework 9
+---
+
+Модули в terraform
+
+Создал 3 модуля - db, app, vpc
+db - модуль для создание виртуалки и настройки на ней бд mongodb
+app - модуль для создания виртуалки и настройки на ней reddit с подключением к mongodb
+vpc - модуль для настройки подключения по ssh
+
+Создал два варианта настройки виртуалок - stage и prod
+stage - создание среды с возможностью подключаться со всех ip адресов
+prod - создание среды с возможностью подключаться только с 46.39.56.7
+
+Настроил еще один внешний модуль stage для хранения state в гугле
+
+Задача со *
+
+Настроил хранение стейт файла в гугловском хранилище через
+```
+terraform {
+  backend "gcs" {
+    bucket = "reddit-terraform"
+    prefix = "stage"
+  }
+}
+```
+
+Задача со **
+
+Сделал деплой приложения.
+Сначала перенастраивается база данных (/etc/mongod.conf), для возможности удаленных подключений.
+Потом заливается приложение на сервер приложения с внутреним ip от бд в конфигурции.
+```
+data "template_file" "pumaservice" {
+  template = "${file("../files/puma.service")}"
+
+  vars {
+    host_db = "${var.host_db}"
+  }
+}
+provisioner "file" {
+  content     = "${data.template_file.pumaservice.rendered}"
+  destination = "/tmp/puma.service"
+}
+```
+
+---
 Homework 8
 ---
 

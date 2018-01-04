@@ -1,3 +1,11 @@
+data "template_file" "pumaservice" {
+  template = "${file("../files/puma.service")}"
+
+  vars {
+    host_db = "${var.host_db}"
+  }
+}
+
 resource "google_compute_instance" "app" {
   name         = "reddit-app"
   machine_type = "g1-small"
@@ -20,6 +28,22 @@ resource "google_compute_instance" "app" {
 
   metadata {
     sshKeys = "${var.user}:${file(var.public_key_path)}"
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "${var.user}"
+    agent       = false
+    private_key = "${file(var.private_key_path)}"
+  }
+
+  provisioner "file" {
+    content     = "${data.template_file.pumaservice.rendered}"
+    destination = "/tmp/puma.service"
+  }
+
+  provisioner "remote-exec" {
+    script = "../files/deploy.sh"
   }
 }
 

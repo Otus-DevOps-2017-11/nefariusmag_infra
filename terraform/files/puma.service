@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=appuser
 WorkingDirectory=/home/appuser/reddit
-ExecStart=/bin/bash -lc 'puma'
+ExecStart=/bin/bash -lc 'export DATABASE_URL=${host_db} && puma'
 Restart=always
 
 [Install]

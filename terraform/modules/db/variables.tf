@@ -14,3 +14,7 @@ variable db_disk_image {
 variable user {
   description = "Name user"
 }
+
+variable private_key_path {
+  description = "Path to the private key used to connect to instance"
+}
