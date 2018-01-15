@@ -14,7 +14,6 @@
       notify: restart mongod
 
     - name: Add config for DB connection
-      become_user: appuser
       template:
         src: templates/db_config.j2
         dest: /home/appuser/db_config
@@ -34,7 +33,6 @@
       tags: app-tag
 
     - name: Fetch the latest version of application code
-      become_user: appuser
       git:
         repo: 'https://github.com/Otus-DevOps-2017-11/reddit.git'
         dest: /home/appuser/reddit
@@ -43,7 +41,6 @@
       notify: restart puma
 
     - name: Bundle install
-      become_user: appuser
       bundler:
         state: present
         chdir: /home/appuser/reddit
