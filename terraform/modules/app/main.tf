@@ -1,10 +1,12 @@
-data "template_file" "pumaservice" {
-  template = "${file("../files/puma.service")}"
-
-  vars {
-    host_db = "${var.host_db}"
-  }
-}
+# Задание с **
+#
+#data "template_file" "pumaservice" {
+#  template = "${file("../files/puma.service")}"
+#
+#  vars {
+#    host_db = "${var.host_db}"
+#  }
+#}
 
 resource "google_compute_instance" "app" {
   name         = "reddit-app"
@@ -37,8 +39,15 @@ resource "google_compute_instance" "app" {
     private_key = "${file(var.private_key_path)}"
   }
 
+# Задание с **
+#
+#  provisioner "file" {
+#    content     = "${data.template_file.pumaservice.rendered}"
+#    destination = "/tmp/puma.service"
+#  }
+
   provisioner "file" {
-    content     = "${data.template_file.pumaservice.rendered}"
+    source      = "../files/puma.service"
     destination = "/tmp/puma.service"
   }
 
