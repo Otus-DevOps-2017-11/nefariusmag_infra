@@ -17,7 +17,7 @@ resource "google_compute_instance" "db" {
   }
 
   metadata {
-    sshKeys = "${var.user}:${file(var.public_key_path)}"
+    sshKeys = "${var.user}:${file(var.public_key_path)}\nderokhin:${file(var.public_key_path)}"
   }
 
   connection {

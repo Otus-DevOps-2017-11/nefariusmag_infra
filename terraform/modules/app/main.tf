@@ -29,7 +29,7 @@ resource "google_compute_instance" "app" {
   }
 
   metadata {
-    sshKeys = "${var.user}:${file(var.public_key_path)}"
+    sshKeys = "${var.user}:${file(var.public_key_path)}\nderokhin:${file(var.public_key_path)}"
   }
 
   connection {
@@ -45,11 +45,6 @@ resource "google_compute_instance" "app" {
 #    content     = "${data.template_file.pumaservice.rendered}"
 #    destination = "/tmp/puma.service"
 #  }
-
-  provisioner "file" {
-    source      = "../files/puma.service"
-    destination = "/tmp/puma.service"
-  }
 
   provisioner "remote-exec" {
     script = "../files/deploy.sh"
