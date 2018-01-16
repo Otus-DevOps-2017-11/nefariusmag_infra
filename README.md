@@ -1,6 +1,47 @@
 Dmitriy Erokhin - nefariusmag
 
 ---
+Homework 11
+---
+
+Ansible работа с плейбуками.
+
+Деплой бд и приложения, используя теги, хосты из инвентори, хендлеры и настраивая packer для работы с ansible.
+
+Для проверки плейбука используется --check
+Для ограничения хостов для работы используется --limit <db>
+
+Настройка БД:
+```
+ansible-playbook reddit_app_one_play.yml --limit db --tags db-tag
+```
+или
+```
+ansible-playbook reddit_app_multiple_plays.yml --tags db-tag
+```
+Настройка приложения:
+```
+ansible-playbook reddit_app_one_play.yml --limit app --tags app-tag
+```
+или
+```
+ansible-playbook reddit_app_multiple_plays.yml --tags app-tag
+```
+Деплой приложения:
+```
+ansible-playbook reddit_app.yml --limit app --tags deploy-tag
+```
+или
+```
+ansible-playbook reddit_app_multiple_plays.yml --tags deploy-tag
+```
+Настройка БД, приложения и деплой:
+```
+ansible-playbook site.yml
+```
+Packer использует плейбуки для конфигурации в образе бд и приложения (packer_db.yml и packer_app.yml) в db.json и app.json
+
+---
 Homework 10
 ---
 
@@ -15,7 +56,6 @@ ansible appserver -i ./inventory -m ping
 Чтобы не указывать каждый раз какой инвентори файл будет запущен, а так же имя пользователя и пусть до ключа в каждой строке хоста инвентори можно задать настройки в конфигурации - ansible.cfg
 
 Модули кроме shell и command проверяют состояние системы\файла и не будут выполнять лишнюю работу по второму разу.
-
 
 ---
 Homework 9
