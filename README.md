@@ -39,7 +39,40 @@ ansible-playbook reddit_app_multiple_plays.yml --tags deploy-tag
 ```
 ansible-playbook site.yml
 ```
-Packer использует плейбуки для конфигурации в образе бд и приложения (packer_db.yml и packer_app.yml) в db.json и app.json
+Packer использует плейбуки для конфигурации в образе бд и приложения (packer_db.yml и packer_app.yml) в ansible/db.json и ansible/app.json
+```
+/bin/packer build -var-file=packer/variables.json ansible/db.json
+/bin/packer build -var-file=packer/variables.json ansible/app.json
+```
+
+Задача со *
+
+Использовал gce.py
+
+Дня настройки dynamic inventory исполоьзовал инструкцию http://docs.ansible.com/ansible/latest/guide_gce.html
+
+Для генерации ключа json использовал инструкцию https://cloud.google.com/video-intelligence/docs/common/auth
+
+Для работы gce.py использовал secrets.py
+
+Проверка через:
+
+ansible/gce.py
+```
+{"tag_reddit-db": ["reddit-db"], "europe-west1-b": ["reddit-app", "reddit-db"], "_meta": {"stats": {"cache_used": false, "inventory_load_time": 0.5437030792236328}, "hostvars": {"reddit-app": {"gce_uuid": "c8cad8a1d017217b968780d9af7bfba7a2cac57b", "gce_public_ip": "35.195.91.236", "ansible_ssh_host": "35.195.91.236", "gce_private_ip": "10.132.0.3", "gce_id": "2230212979571038950", "gce_image": "reddit-app-base-1516019474", "gce_description": null, "gce_machine_type": "g1-small", "gce_subnetwork": "default", "gce_tags": ["reddit-app"], "gce_name": "reddit-app", "gce_zone": "europe-west1-b", "gce_status": "RUNNING", "gce_network": "default", "gce_metadata": {"sshKeys": "appuser:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTEFAN4jd0lb+FrJZezqWH7uG5/UFM6YDvknHmzbX45lsIRLkuxYhFAQ2Oh9PPQS3NrCRfcWhJzS9aPtVz2tsbLZp7H8JTjtbdvLczhemtJ40XouSDqWaQ760P/S9ANZna0Osb7wIs0RQ4fLmr7xckujw8x2lfsIfOgquTXkh7fFPYuuchbuypXMnf/Vt4O5UGph3rHeDPRQU75jfadx4JgGtQKR3wpbDQmhLz+JjqMpggDn1DkmJiHTEbPDTeSgoeK3kj90MzYo82L2tl1sQzZ/IMMlkAG76xoAYIYLVgFCUitgLZ/T0jjmDNqBfTX2ZOCKLqvaAjI+P2eAlHf0Dl derokhin@lanit.ru\n\nderokhin:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTEFAN4jd0lb+FrJZezqWH7uG5/UFM6YDvknHmzbX45lsIRLkuxYhFAQ2Oh9PPQS3NrCRfcWhJzS9aPtVz2tsbLZp7H8JTjtbdvLczhemtJ40XouSDqWaQ760P/S9ANZna0Osb7wIs0RQ4fLmr7xckujw8x2lfsIfOgquTXkh7fFPYuuchbuypXMnf/Vt4O5UGph3rHeDPRQU75jfadx4JgGtQKR3wpbDQmhLz+JjqMpggDn1DkmJiHTEbPDTeSgoeK3kj90MzYo82L2tl1sQzZ/IMMlkAG76xoAYIYLVgFCUitgLZ/T0jjmDNqBfTX2ZOCKLqvaAjI+P2eAlHf0Dl derokhin@lanit.ru\n"}}, "reddit-db": {"gce_uuid": "004e3cb7bff0411ca7b124eaae979339949ce19d", "gce_public_ip": "35.205.232.161", "ansible_ssh_host": "35.205.232.161", "gce_private_ip": "10.132.0.2", "gce_id": "8606252764123372817", "gce_image": "reddit-db-base-1516019160", "gce_description": null, "gce_machine_type": "g1-small", "gce_subnetwork": "default", "gce_tags": ["reddit-db"], "gce_name": "reddit-db", "gce_zone": "europe-west1-b", "gce_status": "RUNNING", "gce_network": "default", "gce_metadata": {"sshKeys": "appuser:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTEFAN4jd0lb+FrJZezqWH7uG5/UFM6YDvknHmzbX45lsIRLkuxYhFAQ2Oh9PPQS3NrCRfcWhJzS9aPtVz2tsbLZp7H8JTjtbdvLczhemtJ40XouSDqWaQ760P/S9ANZna0Osb7wIs0RQ4fLmr7xckujw8x2lfsIfOgquTXkh7fFPYuuchbuypXMnf/Vt4O5UGph3rHeDPRQU75jfadx4JgGtQKR3wpbDQmhLz+JjqMpggDn1DkmJiHTEbPDTeSgoeK3kj90MzYo82L2tl1sQzZ/IMMlkAG76xoAYIYLVgFCUitgLZ/T0jjmDNqBfTX2ZOCKLqvaAjI+P2eAlHf0Dl derokhin@lanit.ru\n\nderokhin:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTEFAN4jd0lb+FrJZezqWH7uG5/UFM6YDvknHmzbX45lsIRLkuxYhFAQ2Oh9PPQS3NrCRfcWhJzS9aPtVz2tsbLZp7H8JTjtbdvLczhemtJ40XouSDqWaQ760P/S9ANZna0Osb7wIs0RQ4fLmr7xckujw8x2lfsIfOgquTXkh7fFPYuuchbuypXMnf/Vt4O5UGph3rHeDPRQU75jfadx4JgGtQKR3wpbDQmhLz+JjqMpggDn1DkmJiHTEbPDTeSgoeK3kj90MzYo82L2tl1sQzZ/IMMlkAG76xoAYIYLVgFCUitgLZ/T0jjmDNqBfTX2ZOCKLqvaAjI+P2eAlHf0Dl derokhin@lanit.ru\n"}}}}, "tag_reddit-app": ["reddit-app"], "35.195.91.236": ["reddit-app"], "reddit-db-base-1516019160": ["reddit-db"], "status_running": ["reddit-app", "reddit-db"], "g1-small": ["reddit-app", "reddit-db"], "reddit-app-base-1516019474": ["reddit-app"], "10.132.0.3": ["reddit-app"], "10.132.0.2": ["reddit-db"], "network_default": ["reddit-app", "reddit-db"], "35.205.232.161": ["reddit-db"]}
+```
+ansible all -i ansible/gce.py -m ping
+```
+reddit-app | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+reddit-db | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+
+```
 
 ---
 Homework 10
