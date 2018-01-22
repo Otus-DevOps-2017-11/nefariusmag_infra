@@ -1,23 +1,26 @@
 ---
-  - name: Deploy App
-    hosts:
-      - app
-      - tag_reddit-app
-    tasks:
+- name: Deploy App
+  hosts:
+    - app
+    - tag_reddit-app
+  vars:
+    deploy_user: appuser
 
-      - name: Fetch the latest version of application code
-        git:
-          repo: 'https://github.com/Otus-DevOps-2017-11/reddit.git'
-          dest: /home/appuser/reddit
-          version: monolith
-        notify: restart puma
-
-      - name: bundle install
-        bundler:
-          state: present
-          chdir: /home/appuser/reddit
-
-    handlers:
-    - name: restart puma
+  tasks:
+    - name: Fetch the latest version of application code
       become: true
-      systemd: name=puma state=restarted
+      git:
+        repo: 'https://github.com/Otus-DevOps-2017-11/reddit.git'
+        dest: "/home/{{ deploy_user }}/reddit"
+        version: monolith
+      notify: restart puma
+
+    - name: bundle install
+      bundler:
+        state: present
+        chdir: "/home/{{ deploy_user }}/reddit"
+
+  handlers:
+  - name: restart puma
+    become: true
+    systemd: name=puma state=restarted
