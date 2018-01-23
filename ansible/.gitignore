@@ -1,0 +1,5 @@
+*.retry
+*.pyc
+credentials.json
+secrets.py
+roles/*
