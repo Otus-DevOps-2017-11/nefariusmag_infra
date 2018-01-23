@@ -11,3 +11,6 @@
       - ruby-full
       - ruby-bundler
       - build-essential
+
+  - include_role:
+      name: app

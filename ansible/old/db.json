@@ -7,7 +7,7 @@
     "image_family": "reddit-db-base",
     "source_image_family": "{{user `source_image_family`}}",
     "zone": "europe-west1-b",
-    "ssh_username": "appuser",
+    "ssh_username": "{{user `ssh_user`}}",
     "machine_type": "{{user `machine_type`}}",
     "disk_size": "11",
     "disk_type": "pd-standard",
@@ -19,7 +19,7 @@
   "provisioners": [
     {
        "type": "ansible",
-       "playbook_file": "ansible/packer_db.yml"
+       "playbook_file": "ansible/playbooks/packer_db.yml"
     }
    ]
 }

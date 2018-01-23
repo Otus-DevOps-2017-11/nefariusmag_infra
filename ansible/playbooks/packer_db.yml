@@ -22,3 +22,6 @@
     systemd:
       name: mongod
       enabled: yes
+
+  - include_role:
+      name: db      

@@ -1,5 +1,6 @@
 {
     "project_id": "infra-666",
     "source_image_family": "ubuntu-1404-lts",
-    "machine_type": "g1-small"
+    "machine_type": "g1-small",
+    "ssh_user": "appuser"
 }
