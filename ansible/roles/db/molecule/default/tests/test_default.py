@@ -20,3 +20,4 @@ def test_config_file(File):
 # http://testinfra.readthedocs.io/en/latest/modules.html#socket
 def test_port(host):
     host.socket("tcp://0.0.0.0:27017").is_listening
+    assert socket.is_listening
