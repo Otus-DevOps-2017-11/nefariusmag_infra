@@ -289,8 +289,8 @@ Homework 6
 ---
 Скрипты для установки:
 
-deploy.sh  
-install_mongodb.sh  
+deploy.sh
+install_mongodb.sh
 install_ruby.sh
 
 Startup.sh # чтобы выкачать удаленно и запустить
