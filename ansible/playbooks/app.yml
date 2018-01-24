@@ -1,0 +1,9 @@
+---
+  - name: Configure App
+    hosts:
+      - app
+      - tag_reddit-app
+    become: true
+    roles:
+     - app
+     - jdauphant.nginx

@@ -17,7 +17,7 @@ resource "google_compute_instance" "db" {
   }
 
   metadata {
-    sshKeys = "${var.user}:${file(var.public_key_path)}"
+    sshKeys = "${var.user}:${file(var.public_key_path)}\nderokhin:${file(var.public_key_path)}"
   }
 
   connection {
@@ -26,18 +26,20 @@ resource "google_compute_instance" "db" {
     agent       = false
     private_key = "${file(var.private_key_path)}"
   }
-
-  provisioner "file" {
-    source      = "../files//mongod.conf"
-    destination = "/tmp/mongod.conf"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mv /tmp/mongod.conf /etc/mongod.conf",
-      "sudo systemctl restart mongod",
-    ]
-  }
+#
+# Задание с **
+#
+#  provisioner "file" {
+#    source      = "../files//mongod.conf"
+#    destination = "/tmp/mongod.conf"
+#  }
+#
+#  provisioner "remote-exec" {
+#    inline = [
+#      "sudo mv /tmp/mongod.conf /etc/mongod.conf",
+#      "sudo systemctl restart mongod",
+#    ]
+#  }
 }
 
 resource "google_compute_firewall" "firewall_mongo" {

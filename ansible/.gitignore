@@ -2,4 +2,4 @@
 *.pyc
 credentials.json
 secrets.py
-roles/*
+jdauphant.nginx

@@ -1,6 +1,76 @@
 Dmitriy Erokhin - nefariusmag
 
 ---
+Homework 12
+---
+
+Ansible работа с ролями.
+
+Создали две роли - roles/db и roles/app, для конфигурирования бд и приложения.
+
+Роли вызываются плейбуками playbooks/app.yml и playbooks/db.yml. Деплоится с помощью playbooks/deploy.yml
+
+Так же в приложении используем роль из ansible-galaxy - jdauphant.nginx
+
+Для создания структуры роли по общепринятому формату используется команда:
+```
+ansible-galaxy init <имя роли>
+```
+
+Общепринятая структура для ролей:
+
+db
+├── README.md
+├── defaults
+│   └── main.yml
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── tasks
+│   └── main.yml
+├── tests
+│   ├── inventory
+│   └── test.yml
+└── vars
+ └── main.yml
+
+Для создания окружений используется практика папки environments, со следующей структурой:
+
+environments
+├── prod
+│   ├── group_vars
+│   │   ├── all
+│   │   ├── app
+│   │   ├── db
+│   ├── inventory
+└── stage
+    ├── group_vars
+    │   ├── all
+    │   ├── app
+    │   ├── db
+    └── inventory
+
+Где мы указываем хосты и переменные.
+
+Запускаются плейбуки командами:
+
+Для prod
+```
+ansible-playbook -i environments/prod/inventory playbooks/site.yml
+```
+Для stage инвентори используется по умолчанию
+```
+ansible-playbook playbooks/site.yml
+```
+
+Задача со *
+
+Для каждого окружения создал свои файлы для подключения - gce.py, secrets.py, credentinals.json
+
+Так как в процессе работы динамическогго инвентари генерируется файл с хостами, то основной сложностью было чтобы переменные из group_vars использовались для работы плейбуков. Пошел по пути создания файлов tag_reddit-db и tag_reddit-app повторяющие db и app и добавления в плейбуки указание дополнительных хостов.
+
+---
 Homework 11
 ---
 
@@ -219,8 +289,8 @@ Homework 6
 ---
 Скрипты для установки:
 
-deploy.sh  
-install_mongodb.sh  
+deploy.sh
+install_mongodb.sh
 install_ruby.sh
 
 Startup.sh # чтобы выкачать удаленно и запустить

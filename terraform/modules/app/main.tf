@@ -1,10 +1,12 @@
-data "template_file" "pumaservice" {
-  template = "${file("../files/puma.service")}"
-
-  vars {
-    host_db = "${var.host_db}"
-  }
-}
+# Задание с **
+#
+#data "template_file" "pumaservice" {
+#  template = "${file("../files/puma.service")}"
+#
+#  vars {
+#    host_db = "${var.host_db}"
+#  }
+#}
 
 resource "google_compute_instance" "app" {
   name         = "reddit-app"
@@ -27,7 +29,7 @@ resource "google_compute_instance" "app" {
   }
 
   metadata {
-    sshKeys = "${var.user}:${file(var.public_key_path)}"
+    sshKeys = "${var.user}:${file(var.public_key_path)}\nderokhin:${file(var.public_key_path)}"
   }
 
   connection {
@@ -37,10 +39,12 @@ resource "google_compute_instance" "app" {
     private_key = "${file(var.private_key_path)}"
   }
 
-  provisioner "file" {
-    content     = "${data.template_file.pumaservice.rendered}"
-    destination = "/tmp/puma.service"
-  }
+# Задание с **
+#
+#  provisioner "file" {
+#    content     = "${data.template_file.pumaservice.rendered}"
+#    destination = "/tmp/puma.service"
+#  }
 
   provisioner "remote-exec" {
     script = "../files/deploy.sh"
@@ -58,6 +62,19 @@ resource "google_compute_firewall" "firewall_puma" {
   allow {
     protocol = "tcp"
     ports    = ["9292"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["reddit-app"]
+}
+
+resource "google_compute_firewall" "firewall_nginx" {
+  name    = "allow-nginx-default"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
   }
 
   source_ranges = ["0.0.0.0/0"]
