@@ -48,7 +48,7 @@ ansible-galaxy init <имя роли>
 ```
 
 Общепринятая структура для ролей:
-
+```
 db
 ├── README.md
 ├── defaults
@@ -64,9 +64,10 @@ db
 │   └── test.yml
 └── vars
  └── main.yml
+```
 
 Для создания окружений используется практика папки environments, со следующей структурой:
-
+```
 environments
 ├── prod
 │   ├── group_vars
@@ -80,6 +81,7 @@ environments
     │   ├── app
     │   ├── db
     └── inventory
+```
 
 Где мы указываем хосты и переменные.
 
