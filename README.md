@@ -25,6 +25,12 @@ molecule converge # Применить новую конфигурацию
 molecule verify # Прогнать тест
 ```
 
+Packer использует ansible для создания образов в том числе и созданные роли, для создания новых образов используем следующие команды из директории packer:
+```
+packer build -var-file=variables.json db.json
+packer build -var-file=variables.json app.json
+```
+
 Задание со *
 
 Nginx настароил и для Vagrant
