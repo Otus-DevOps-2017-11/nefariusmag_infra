@@ -1,6 +1,42 @@
 Dmitriy Erokhin - nefariusmag
 
 ---
+Homework 13
+---
+
+Тестирование с помощью Ansible, VirtualBox, Vagrant, Molecule
+
+Команды для Vagrant
+```
+vagrant up  
+vagrant box list # Список локальных вирталок для вагранта
+vagrant status
+vagrant ssh appserver
+vagrant provision dbserver # Выполнение команд на уже запущенной виртуалке
+vagrant destroy -f
+```
+
+Команды для Molecule
+```
+molecule init scenario --scenario-name default -r db -d vagrant # Заготовка тестов для роли используя vagrant как драйвер виртуалок
+molecule list
+molecule login -h instance # Подключиться к виртуалке
+molecule converge # Применить новую конфигурацию
+molecule verify # Прогнать тест
+```
+
+Packer использует ansible для создания образов в том числе и созданные роли, для создания новых образов используем следующие команды из директории packer:
+```
+packer build -var-file=variables.json db.json
+packer build -var-file=variables.json app.json
+```
+
+Задание со *
+
+Nginx настароил и для Vagrant
+
+
+---
 Homework 12
 ---
 
@@ -18,7 +54,7 @@ ansible-galaxy init <имя роли>
 ```
 
 Общепринятая структура для ролей:
-
+```
 db
 ├── README.md
 ├── defaults
@@ -34,9 +70,10 @@ db
 │   └── test.yml
 └── vars
  └── main.yml
+```
 
 Для создания окружений используется практика папки environments, со следующей структурой:
-
+```
 environments
 ├── prod
 │   ├── group_vars
@@ -50,6 +87,7 @@ environments
     │   ├── app
     │   ├── db
     └── inventory
+```
 
 Где мы указываем хосты и переменные.
 
